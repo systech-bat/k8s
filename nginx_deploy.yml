@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: nginx-deploy
+ labels:
+  app: front-nginx01-deploy
+spec:
+ template:
+  metadata:
+   name: nginx01-pod
+   labels:
+    app: nginx01-front-pod
+  spec:
+   containers:
+   - name: nginx01-cont
+     image: nginx:latest
+     resources:
+      requests:
+        cpu: "200m"
+        memory: "128Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+ replicas: 3
+ selector:
+  matchLabels:
+   app: nginx01-front-pod
