@@ -4,6 +4,9 @@ metadata:
  name: nginx-deploy
  labels:
   app: front-nginx01-deploy
+ annotations:
+  buildversion: 1.0.1
+
 spec:
  template:
   metadata:
