@@ -5,3 +5,4 @@ metadata:
 value: 900000000
 description: medium-priority-class
 globalDefault: false
+preemptionPolicy: PreemptLowerPriority
