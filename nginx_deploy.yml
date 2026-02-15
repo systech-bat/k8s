@@ -24,6 +24,10 @@ spec:
       limits:
         cpu: "500m"
         memory: "512Mi"
+     envFrom:
+     - configMapRef:
+        name: nginx-config-map
+
    affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
