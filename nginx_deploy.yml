@@ -28,6 +28,15 @@ spec:
      - configMapRef:
         name: nginx-config-map
 
+     volumeMounts:
+      - mountPath: /var//logs
+        name: log-volume
+
+   volumes:
+    - name: log-volume
+      persistentVolumeClaim:
+        claimName: pvc-local
+
    initContainers:
     - name: init-cont
       image: busybox
