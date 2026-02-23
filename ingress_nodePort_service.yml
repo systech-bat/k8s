@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+  name: ingress
+  namespace: ingress-space
+spec:
+  externalTrafficPolicy: Local
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - appProtocol: http
+    name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+    nodePort: 30030
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+  type: NodePort
