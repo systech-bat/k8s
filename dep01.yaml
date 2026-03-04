@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy02
+  namespace: bazcorp
+  labels:
+    app: nginx02-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx02-pod
+  template:
+   spec:
+    containers:
+    - name: nginx02-pod
+      image: nginx01:v1
+   metadata:
+      labels:
+        app: nginx02-pod
