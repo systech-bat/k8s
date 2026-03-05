@@ -13,6 +13,18 @@ spec:
        - podSelector:
            matchLabels:
              name: api-pod
+         namespaceSelector:
+          matchLabels:
+            name: bazcorp-prod
+       - ipBlock:
+           cidr: 10.10.20.10/32
       ports:
         -  protocol: TCP
            port: 3306
+  egress:
+    - to:
+        - ipBlock:
+            cidr: 10.10.20.25/32
+      ports:
+        - protocol: TCP
+          port: 80
