@@ -12,7 +12,7 @@ spec:
      securityContext:
       runAsUser: 1002
       capabilities:
-        add: ["NET_ADMIN"]
+        add: ["NET_ADMIN", "SYS_TIME"]
   -  image: ubuntu
      name: sidecar
      command: ["sleep", "5000"]
