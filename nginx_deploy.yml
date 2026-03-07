@@ -1,3 +1,40 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bazcorp
+
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-local
+  namespace: bazcorp
+spec:
+  accessModes:
+  - ReadWriteMany
+  persistentVolumeReclaimPolicy: Recycle
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /k8s_local_pv
+    type: Directory
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-local
+  namespace: bazcorp
+spec:
+  accessModes:
+  - ReadWriteMany
+  volumeName: pv-local
+  resources:
+    requests:
+      storage: 1Gi
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
