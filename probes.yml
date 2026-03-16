@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: probe-test
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: probe-deploy
+  namespace: probe-test
+spec:
+  replicas: 1
+  selector:
+   matchLabels:
+    app: probe-test-pod
+  template:
+    metadata:
+      labels:
+        app: probe-test-pod
+    spec:
+      containers:
+        - name: probe-con01
+          image: bazdoc/http-serv:v3
+          ports:
+            - name: http
+              protocol: TCP
+              containerPort: 8080
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: probe-client-deploy
+  namespace: probe-test
+spec:
+ replicas: 1
+ selector:
+  matchLabels: 
+    app: probe-client-pod
+ template:
+    metadata:
+     labels:
+      app: probe-client-pod
+    spec: 
+     containers:
+      - name: probe-clinet-cont
+        image: bazdoc/healthcheck:1.0
+        ports:
+         - name: http-cli
+           protocol: TCP
+           containerPort: 8080
+         - name: web-healh-check
+           protocol: TCP
+           containerPort: 8086
+        command: ["./app"]
+        args: ["url", "http://probe-service:8080/cakes", "-wait", "600"]
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: probe-service
+  namespace: probe-test
+spec:
+  selector:
+    app: probe-test-pod
+  ports:
+    - name: http-service
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+    
