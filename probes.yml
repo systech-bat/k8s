@@ -71,4 +71,19 @@ spec:
       protocol: TCP
       port: 8080
       targetPort: 8080
-    
+      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: health-check-svc
+  namespace: probe-test
+spec:
+  selector:
+    app: probe-client-pod
+  ports:
+   - name: web-health-check
+     protocol: TCP
+     port: 8080
+     targetPort: 8080
+
