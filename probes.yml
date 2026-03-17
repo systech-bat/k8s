@@ -55,6 +55,18 @@ spec:
            containerPort: 8086
         command: ["./app"]
         args: ["url", "http://probe-service:8080/cakes", "-wait", "600"]
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 3  
+        readinessProbe: 
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 3
 
 
 ---

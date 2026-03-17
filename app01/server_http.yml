@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app01
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: http-server-pod
+  namespace: app01
+  labels:
+    app: http-server-app
+spec:
+  containers:
+  - name: http-server-cont01
+    image: bazdoc/http-serv:v1
+    ports:
+    - name: http-serv-port
+      protocol: TCP
+      containerPort: 8080
