@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: Namespace
+metadata: 
+  name: metallb-test
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metallb-deploy01
+  namespace: metallb-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metallb-app01
+  template:
+    metadata:
+      labels:
+        app: metallb-app01
+    spec:
+      containers:
+      - name: nginx-metallb-cont01
+        image: nginx:latest
+        ports:
+        - name: http
+          protocol: TCP
+          containerPort: 80
+        resources:
+          requests:
+           cpu: 200m
+           memory: 128Mi
+          limits:
+           cpu: 300m
+           memory: 192Mi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: metallb-test-svc
+  namespace: metallb-test
+spec:
+  selector:
+    app: metallb-app01
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+
+---
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nginx-hpa
+  namespace: metallb-test
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: metallb-deploy01
+  minReplicas: 1
+  maxReplicas: 5          
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70   
+
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 150
+    scaleUp:
+      stabilizationWindowSeconds: 15
+      policies:
+      - type: Percent
+        value: 50                             
+        periodSeconds: 30
+      - type: Pods
+        value: 2
+        periodSeconds: 30
+      selectPolicy: Max  
